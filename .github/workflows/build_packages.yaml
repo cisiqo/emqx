@@ -151,7 +151,7 @@ jobs:
         path: _packages/${{ matrix.profile }}/
 
   linux:
-    runs-on: ['self-hosted', 'linux', "${{ matrix.arch }}"]
+    runs-on: "${{ matrix.arch == 'arm64' && 'aws-arm64' || 'aws-amd64'  }}"
     # always run in builder container because the host might have the wrong OTP version etc.
     # otherwise buildx.sh does not run docker if arch and os matches the target arch and os.
     container:
@@ -199,8 +199,6 @@ jobs:
         shell: bash
 
     steps:
-    - uses: AutoModality/action-clean@v1
-
     - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.inputs.ref }}
